@@ -1,16 +1,16 @@
 # description
-this is test project using nest js,mongodb,i use wtService for authentication,
+this is test project using nest js,mongodb,i use jwtService for authentication,
 you can send chat,file if you are authenticated.when ever get online again you
 will get notifications about unseen messages.you can see list of chats between you and others.
 # installation
-$ yarn install
+$ npm install
 Running the app
 # development
-$ yarn run start
+$ npm run start
 
 # watch mode
-$ yarn run start:dev
+$ npm run start:dev
 
 # production mode
-$ yarn run start:prod
+$ npm run start:prod
 
