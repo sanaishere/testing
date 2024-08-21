@@ -26,13 +26,11 @@ export class WebsocketGateway implements OnGatewayConnection {
     
    @WebSocketServer() server: Server;
     async  handleConnection(client: Socket) {
-      console.log(client.id,"connected")
-      console.log(client.handshake.headers.authorization)
-      client.emit('hello','hi')
       let token=client.handshake.headers.authorization
       try{
       const payload=await this.authService.verifyToken(token)
       await this.authService.setSocketId(payload['userId'],client.id)
+      //get notifs after connection again
       await this.getNotifs(client.id)
       }catch(err){
        console.log(err)
@@ -54,7 +52,7 @@ export class WebsocketGateway implements OnGatewayConnection {
     socket.emit('error',err)
   }
   }
-    
+    //send message realtime and if user is online update chat to be seen!
    @SubscribeMessage('send message')
    async sendMessage(@MessageBody() data:Chat,@ConnectedSocket() socket:User) {
     let sendingData={message:data.messageText?data.messageText:data.messageFile,
@@ -72,10 +70,7 @@ export class WebsocketGateway implements OnGatewayConnection {
    }
   }
 
-  async sendFile() {
-
-  }
-   
+   //sending messages realtime
   async sendMessages(@MessageBody() data:any,@ConnectedSocket() socket:User) {
     console.log(data)
     try{
@@ -85,10 +80,7 @@ export class WebsocketGateway implements OnGatewayConnection {
    }
   }
 
-  async showFile(@MessageBody() data:{file:any}) {
-   this.server.emit('file message',data.file)
-
-  }
+  
 //get notification for unSeen messages
    async getNotifs(socketId:string) {
      let user=await this.authService.findBySocketId(socketId)

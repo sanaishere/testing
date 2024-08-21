@@ -27,7 +27,7 @@ export class ChatsService {
       return newChat
 
     }
-
+    //send file url ,and frontend should handle it 
     async sendFile(user:User,file:Express.Multer.File,reciverId:string) {
         let fileUrl=`${process.env.URL}/chats/file/${file.filename}`
         let newChat=await this.chatModel.create({
@@ -40,8 +40,7 @@ export class ChatsService {
           this.webSocketGateAway.sendMessage(newChat,reciver)
           return newChat
     }
-
-
+    //get chats i involve ,group By different users i have conversations
     async getMyChats(user:User) {
         let chats =await this.chatModel.aggregate( [
             {
@@ -77,7 +76,7 @@ export class ChatsService {
     await this.webSocketGateAway.sendMessages(sendingData,user)
     return chats
     }
-
+    //get chat with 2 specific users
     async getMyChatsWithUser(user:User,anotherUserId:string) {
         const chats=await this.getChatsBetweenUsers(user,anotherUserId)
         let sendingData=await this.sendingData(chats)
