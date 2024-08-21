@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate{
        
       
         try{
-        const payload=this.verifyToken(accessToken)
+        const payload=this.authService.verifyToken(accessToken)
         const user=await this.authService.findById(payload['userId'])
         req.user=user
         console.log("user ",req.user)
@@ -42,11 +42,5 @@ export class AuthGuard implements CanActivate{
 
     
 
-     verifyToken(token:string){
-        try{
-        return this.jwtService.verify(token)
-        }catch(err){
-            throw new HttpException(err,err.status||HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-     }
+     
 }

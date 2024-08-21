@@ -43,11 +43,17 @@ export class WebsocketGateway implements OnGatewayConnection {
     }
 
    async handleDisconnect(socket: Socket) {
+    try{
     const user:User = await this.authService.findBySocketId(socket.id);
     if (user) {
        await this.authService.setSocketId(user.id,null)
     }
     }
+  catch(err){
+    console.log(err)
+    socket.emit('error',err)
+  }
+  }
     
    @SubscribeMessage('send message')
    async sendMessage(@MessageBody() data:Chat,@ConnectedSocket() socket:User) {
@@ -56,7 +62,7 @@ export class WebsocketGateway implements OnGatewayConnection {
     }
    console.log("socket",socket.socketId)
    if(socket.socketId===null){
-    console.log('test')
+    
     await this.notificationService.create(data)
    }
    else{
