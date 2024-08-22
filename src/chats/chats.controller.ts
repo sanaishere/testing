@@ -55,11 +55,6 @@ async getUnseenMessages(@Request() {user}) {
 return await this.chatService.getUnseenMessages(user)
 }
 
-@UseGuards(AuthGuard)
-@Get('getMyNotifs')
-async getMyNotifications(@Request() {user}) {
-
-}
 
 
 

@@ -6,13 +6,15 @@ import { SendChatDto } from './dto/sendChat.dto';
 import { User } from 'src/auth/Model/user.model';
 import { WebsocketGateway } from 'src/websocket/webSocket.gateAway';
 import { AuthService } from 'src/auth/auth.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 require('dotenv').config()
 @Injectable()
 export class ChatsService {
     constructor(@InjectModel(Chat.name) private chatModel:Model<Chat>,
       private webSocketGateAway:WebsocketGateway,
-      private authService:AuthService){}
+      private authService:AuthService,
+      ){}
     
     async sendChat(body:SendChatDto,user:User){
       let newChat=await this.chatModel.create({
@@ -88,6 +90,7 @@ export class ChatsService {
        const chats=await this.chatModel.find({isSeen:false,
         reciver:user._id})
         await this.webSocketGateAway.sendMessages(await this.sendingData(chats),user)
+        return chats
     }
 
    
@@ -123,6 +126,5 @@ export class ChatsService {
             .sort({'date':-1})
     }
 
-     
 
 }
