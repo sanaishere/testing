@@ -14,7 +14,7 @@ export class AuthService {
    private jwtService:JwtService ){}
 
    async signUp(signUpInput:SignUpDto) {
-    const userExists=await this.userModel.findOne({where:{email:signUpInput.email}})
+    const userExists=await this.userModel.findOne({email:signUpInput.email})
     if(userExists ){
         throw new HttpException('patient is already existed',HttpStatus.NOT_FOUND)
     }
