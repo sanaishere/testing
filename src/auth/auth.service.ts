@@ -31,7 +31,7 @@ export class AuthService {
     if(!user){
         throw new HttpException('user is not existed with this email',HttpStatus.NOT_FOUND)
     }
-    if(!bcrypt.compare(loginInput.password,user.password)) {
+    if(! await bcrypt.compare(loginInput.password,user.password)) {
         throw new HttpException('wrong information',HttpStatus.NOT_FOUND)
     }
     return {user,token:this.createToken(user.id)}
